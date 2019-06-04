@@ -62,7 +62,17 @@ extension IndicatorKind: RawRepresentable {
     }
 }
 
-struct Bindings {
+/// Low level struct to be able to call `tulip` library directly
+public struct Bindings {
+
+    /// Call the `tulip` library directly. See the [tulip indicator list](https://tulipindicators.org/list)
+    /// for more information
+    /// - Parameter name: The name of the indicator
+    /// - Parameter inputs: The array of inputs value
+    /// - Parameter options: The array of options value
+    public static func tulip_indicator(name: String, inputs: [Double], options: [Double]) -> (Int, [Double]) {
+        return Bindings.shared.call_indicator(name: name, inputs: inputs, options: options)
+    }
 
     static let shared = Bindings()
 
@@ -88,7 +98,7 @@ struct Bindings {
 
         let beginIdx = Int(indicator.start(options))
         let count = inputs.count - beginIdx
-        var outputs = [Double](repeating: 0.0, count: Int(indicator.options) * count)
+        var outputs = [Double](repeating: 0.0, count: Int(indicator.outputs) * count)
 
         var result: Int32 = TI_OKAY
 
@@ -107,5 +117,3 @@ struct Bindings {
         return (beginIdx, outputs)
     }
 }
-
-
