@@ -33,9 +33,7 @@ public extension Quote {
 }
 
 // MARK: - Functions
-/// MovingAverage represents the different kind
-/// of mocing averages.
-public enum MovingAverage: String {
+enum MovingAverage: String {
     /// Simple Moving Average
     case sma
     /// Weighted Moving Average
@@ -52,17 +50,38 @@ public enum MovingAverage: String {
     case kama
 }
 
-/// Computes the moving average of on the period for the provided inputs
-///
-/// - Parameters:
-///   - avg: The `MovingAverage` kind
-///   - period: The period of the moving average
-///   - inputs: The inputs data
-/// - Returns: The result as `MovingAverage.Result`
-public func movingAverage(_ avg: MovingAverage, period: Int, inputs: [Double]) -> (Int, [Double]) {
+func movingAverage(_ avg: MovingAverage, period: Int, inputs: [Double]) -> (Int, [Double]) {
 
     let (beginIdx, outputs) = Bindings.shared.call_indicator(name: avg.rawValue, inputs: inputs, options: [Double(period)])
     return (beginIdx, outputs)
+}
+
+public func sma(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.sma, period: n, inputs: inputs)
+}
+
+public func wma(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.wma, period: n, inputs: inputs)
+}
+
+public func ema(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.ema, period: n, inputs: inputs)
+}
+
+public func dema(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.dema, period: n, inputs: inputs)
+}
+
+public func tema(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.tema, period: n, inputs: inputs)
+}
+
+public func trima(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.trima, period: n, inputs: inputs)
+}
+
+public func kama(inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return movingAverage(.kama, period: n, inputs: inputs)
 }
 
 /// The result of a bolling band computations
