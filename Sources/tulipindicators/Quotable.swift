@@ -26,7 +26,7 @@ public protocol Quotable {
     var close: Double { get }
 
     /// The volume value
-    var volume: Double { get }
+    var volume: Int { get }
 }
 
 public extension Quotable {
@@ -34,7 +34,7 @@ public extension Quotable {
     var low: Double { return 0.0 }
     var open: Double { return 0.0 }
     var close: Double { return 0.0 }
-    var volume: Double { return 0.0 }
+    var volume: Int { return 0 }
 }
 
 func HL<T: Quotable>(_ inputs: [T]) -> [Double] {
@@ -52,7 +52,7 @@ func CV<T: Quotable>(_ inputs: [T]) -> [Double] {
 
     for i in 0..<inputs.count {
         raw_inputs[i] = inputs[i].close
-        raw_inputs[i+inputs.count] = inputs[i].volume
+        raw_inputs[i+inputs.count] = Double(inputs[i].volume)
     }
     return raw_inputs
 }
@@ -82,7 +82,7 @@ func HLV<T: Quotable>(_ inputs: [T]) -> [Double] {
     for i in 0..<inputs.count {
         raw_inputs[i] = inputs[i].high
         raw_inputs[i+inputs.count] = inputs[i].low
-        raw_inputs[i+2*inputs.count] = inputs[i].volume
+        raw_inputs[i+2*inputs.count] = Double(inputs[i].volume)
     }
     return raw_inputs
 }
@@ -93,7 +93,7 @@ func HLCV<T: Quotable>(_ inputs: [T]) -> [Double] {
         raw_inputs[i] = inputs[i].high
         raw_inputs[i+inputs.count] = inputs[i].low
         raw_inputs[i+2*inputs.count] = inputs[i].close
-        raw_inputs[i+3*inputs.count] = inputs[i].volume
+        raw_inputs[i+3*inputs.count] = Double(inputs[i].volume)
     }
     return raw_inputs
 }

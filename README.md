@@ -1,3 +1,5 @@
 # tulipindicators-swift
 
-A description of this package.
+This package is a swift packager that wraps the [tulip C library](https://tulipindicators.org)
+
+

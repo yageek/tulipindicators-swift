@@ -1,0 +1,7 @@
+author: Yannick Heinrich
+author_url: https://blog.yageek.net
+root_url: https://github.com/yageek/tulipindicators-swift
+module_version: 0.0.1
+module: tulipindicators
+framework_root: .
+xcodebuild_arguments: ["-scheme", "tulipindicators-Package"]

@@ -1,35 +1,57 @@
 import libindicators
 
-// MARK: - Public API
+/// The kind of the indicator
 public enum IndicatorKind {
+    /// The indicator is an overlay
     case overlay
+    /// The indicator is simple math
     case math
+    /// The indicator is a simple indicator
     case simple
+    /// The indicator is a comparative indicator
     case comparative
 }
 
-// MARK: - Bindings
-enum Result: RawRepresentable {
-    case Ok
-    case InvalidOption
+private func arguments(array: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?, count: Int32) -> [String] {
 
-    public var rawValue: Int32 {
-        switch self {
-        case .Ok: return TI_OKAY
-        case .InvalidOption : return TI_INVALID_OPTION
-        }
+    var args: [String] = [String](repeating: "", count: Int(count))
+    for i in 0..<Int(count) {
+        args[i] = String(cString: array![i]!, encoding: .ascii) ?? "??"
     }
-
-    init?(rawValue: Int32) {
-        switch rawValue {
-        case TI_OKAY: self = .Ok
-        case TI_INVALID_OPTION: self = .InvalidOption
-        default:
-            return nil
-        }
-    }
+    return args
 }
 
+/// A struct holding the information about an indicator
+public struct IndicatorInfo {
+
+    /// The name of the indicator
+    public let name: String
+
+    /// A desriptive name of the indicator
+    public let fullName: String
+
+    /// The names of the required inputs
+    public let inputs: [String]
+
+    /// The names of the required options
+    public let options: [String]
+
+    /// The names of the geneated outputs
+    public let outputs: [String]
+
+    /// The kind of the indicator
+    public let kind: IndicatorKind
+
+    init(tulip_info: ti_indicator_info) {
+        var tulip_info = tulip_info
+        self.name = String(cString: tulip_info.name, encoding: .ascii) ?? "??"
+        self.fullName = String(cString: tulip_info.full_name, encoding: .ascii) ?? "??"
+        self.kind = IndicatorKind(rawValue: tulip_info.type)!
+        self.inputs = arguments(array: ti_indicator_info_get_input_names(&tulip_info), count: tulip_info.options)
+        self.options = arguments(array: ti_indicator_info_get_option_names(&tulip_info), count: tulip_info.options)
+        self.outputs = arguments(array: ti_indicator_info_get_output_names(&tulip_info), count: tulip_info.options)
+    }
+}
 
 extension IndicatorKind: RawRepresentable {
     public var rawValue: Int32 {
@@ -64,17 +86,24 @@ extension IndicatorKind: RawRepresentable {
 
 
 /// Low level struct to be able to call `tulip` library directly
-public struct Bindings {
+public struct Tulip {
     /// Call the `tulip` library directly. See the [tulip indicator list](https://tulipindicators.org/list)
     /// for more information
     /// - Parameter name: The name of the indicator
     /// - Parameter inputs: The array of inputs value
     /// - Parameter options: The array of options value
-    public static func tulip_indicator(name: String, inputs: [Double], options: [Double]) -> (Int, [Double]) {
-        return Bindings.shared.call_indicator(name: name, inputs: inputs, options: options)
+    public static func call_indicator(name: String, inputs: [Double], options: [Double]) -> (Int, [Double]) {
+        return Tulip.shared.call_indicator(name: name, inputs: inputs, options: options)
     }
 
-    static let shared = Bindings()
+    /// Get the information about one indicator
+    /// - Parameter name: The name of the indicator
+    public static func indicator_info(name: String) -> IndicatorInfo {
+        let indicator = Tulip.shared.indicator_info(by: name)
+        return IndicatorInfo(tulip_info: indicator)
+    }
+
+    static let shared = Tulip()
 
     private init() { }
 
@@ -88,16 +117,19 @@ public struct Bindings {
         return indicators
     }()
 
-    func call_indicator(name: String, inputs: [Double], options: [Double]) -> (Int, [Double]) {
+    func indicator_info(by name: String) -> ti_indicator_info {
+        return Tulip.list[name]!
+    }
 
-        let indicator = Bindings.list[name]!
-        return call_indicator(indicator, inputs: inputs, options: options)
+    func call_indicator(name: String, inputs: [Double], options: [Double]) -> (Int, [Double]) {
+        return call_indicator(indicator_info(by: name), inputs: inputs, options: options)
     }
 
     private func call_indicator(_ indicator: ti_indicator_info, inputs: [Double], options: [Double]) -> (Int, [Double]) {
 
+        let in_size = inputs.count/Int(indicator.inputs)
         let beginIdx = Int(indicator.start(options))
-        let count = inputs.count - beginIdx
+        let count = in_size - beginIdx
         var outputs = [Double](repeating: 0.0, count: Int(indicator.outputs) * count)
 
         var result: Int32 = TI_OKAY
@@ -105,11 +137,13 @@ public struct Bindings {
         inputs.withUnsafeBufferPointer { (inputs_ptr)  in
             outputs.withUnsafeMutableBufferPointer { (outputs_ptr)  in
 
-                let all_inputs = [inputs_ptr.baseAddress]
-                let range = 0..<indicator.outputs
-                let all_outputs = range.map { outputs_ptr.baseAddress?.advanced(by: Int($0)*count) }
+                let in_range = 0..<indicator.inputs
+                let all_inputs = in_range.map { inputs_ptr.baseAddress?.advanced(by: Int($0)*in_size) }
 
-                result = indicator.indicator(Int32(inputs.count), all_inputs, options, all_outputs)
+                let out_range = 0..<indicator.outputs
+                let all_outputs = out_range.map { outputs_ptr.baseAddress?.advanced(by: Int($0)*count) }
+
+                result = indicator.indicator(Int32(in_size), all_inputs, options, all_outputs)
             }
         }
 

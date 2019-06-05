@@ -8,6 +8,6 @@ func TIAssert(_ left: @autoclosure () -> [Double], _ right: @autoclosure () -> [
     XCTAssertEqual(lhs.count, rhs.count, "Both elements should have the same length", file: file, line: line)
 
     for i in 0..<lhs.count {
-        XCTAssert( abs(lhs[i] - rhs[i]) <= delta , "abs(lhs[\(i)]-rhs[\(i)]) > delta => abs(\(lhs[i]) - \(rhs[i])) > \(delta)", file: file, line: line)
+        XCTAssert( abs(lhs[i] - rhs[i]) <= delta , "abs(lhs[\(i)]-rhs[\(i)]) > delta => abs(\(lhs[i]) - \(rhs[i]))  = \(abs(lhs[i] - rhs[i]))> \(delta)", file: file, line: line)
     }
 }
