@@ -1,5 +1,5 @@
 import XCTest
-import tulipindicators
+@testable import tulipindicators
 
 final class BollingerBandsTest: XCTestCase {
 
@@ -8,44 +8,44 @@ final class BollingerBandsTest: XCTestCase {
     private let period = 5
     private let delta: Double = 1e-3
 
-    func runAVGTest(_ type: MovingAverage, _ expected: [Double], file: StaticString = #file, line: UInt = #line) {
-        let (_, res) = movingAverage(type, period: period, inputs: inputs)
+    func runAVGTest(_ fn: (_ inputs: [Double], _ period: Int) -> (Int, [Double]), _ expected: [Double], file: StaticString = #file, line: UInt = #line) {
+        let (_, res) = fn(inputs, period)
         TIAssert(expected, res, delta, file: file, line: line)
     }
 
     func testSMA() {
         let expected: [Double] = [82.426,82.738,83.094,83.318,83.628,83.778,84.254,84.994,85.574,86.218,86.804]
-        runAVGTest(.sma, expected)
+        runAVGTest(sma, expected)
     }
 
     func testWMA() {
         let expected: [Double] = [82.825,83.066,83.100,83.399,83.809,84.053,84.637,85.399,86.031,86.763,87.121]
-        runAVGTest(.wma, expected)
+        runAVGTest(wma, expected)
     }
 
     func testEMA() {
         let expected: [Double] = [81.590,81.413,81.899,82.266,82.714,82.859,82.853,83.232,83.671,83.901,84.444,85.143,85.725,86.407,86.701]
-        runAVGTest(.ema, expected)
+        runAVGTest(ema, expected)
     }
 
     func testDEMA() {
         let expected: [Double] = [84.159,84.379,85.125,86.062,86.727,87.529,87.646]
-        runAVGTest(.dema, expected)
+        runAVGTest(dema, expected)
     }
 
     func testTEMA() {
         let expected: [Double] = [87.042,87.819,87.721]
-        runAVGTest(.tema, expected)
+        runAVGTest(tema, expected)
     }
 
     func testTRIMA() {
         let expected: [Double] = [82.437,82.908,83.204,83.260,83.440,83.807,84.302,84.863,85.537,86.288,86.901]
-        runAVGTest(.trima, expected)
+        runAVGTest(trima, expected)
     }
 
     func testKAMA() {
         let expected: [Double] = [83.610,83.560,83.452,83.506,83.647,83.686,84.126,85.026,85.690,86.447,86.673]
-        runAVGTest(.kama, expected)
+        runAVGTest(kama, expected)
     }
 
     // MARK: - Bollinger Band
@@ -58,7 +58,7 @@ final class BollingerBandsTest: XCTestCase {
         let period: Int = 5
         let stddev: Double = 2
         let delta: Double = 1e-3
-        let (_,res) = bbands(period: period, stddev: stddev, inputs: inputs);
+        let (_,res) = bbands(inputs, period: period, stddev: stddev);
         TIAssert(res.lower, exp_lower, delta);
         TIAssert(res.middle, exp_middle, delta);
         TIAssert(res.upper, exp_upper, delta);

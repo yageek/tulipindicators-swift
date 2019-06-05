@@ -62,9 +62,9 @@ extension IndicatorKind: RawRepresentable {
     }
 }
 
+
 /// Low level struct to be able to call `tulip` library directly
 public struct Bindings {
-
     /// Call the `tulip` library directly. See the [tulip indicator list](https://tulipindicators.org/list)
     /// for more information
     /// - Parameter name: The name of the indicator

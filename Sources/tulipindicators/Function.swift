@@ -1,87 +1,52 @@
 import libindicators
 
-// MARK: - Quote
-
-/// An element representing a quote
-///
-/// For the sake of convenience, the protocol provides
-/// default implementation for all values that equal zero.
-public protocol Quote {
-
-    /// The high value
-    var high: Double { get }
-
-    /// The low value
-    var low: Double { get }
-
-    /// The open value
-    var open: Double { get }
-
-    /// The close value
-    var close: Double { get }
-
-    /// The volume value
-    var volume: Double { get }
+/// Simple moving average
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func sma(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "sma", inputs: inputs, options: [Double(n)])
 }
 
-public extension Quote {
-    var high: Double { return 0.0 }
-    var low: Double { return 0.0 }
-    var open: Double { return 0.0 }
-    var close: Double { return 0.0 }
-    var volume: Double { return 0.0 }
+/// Weighted moving average
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func wma(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "wma", inputs: inputs, options: [Double(n)])
 }
 
-// MARK: - Functions
-enum MovingAverage: String {
-    /// Simple Moving Average
-    case sma
-    /// Weighted Moving Average
-    case wma
-    /// Exponential Moving Average
-    case ema
-    /// Double Exponential Moving Average
-    case dema
-    /// Triple Exponential Moving Average
-    case tema
-    /// Triangular Moving Average
-    case trima
-    /// Kaufman Adaptive Moving Average
-    case kama
+/// Exponential moving average
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func ema(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "ema", inputs: inputs, options: [Double(n)])
 }
 
-func movingAverage(_ avg: MovingAverage, period: Int, inputs: [Double]) -> (Int, [Double]) {
-
-    let (beginIdx, outputs) = Bindings.shared.call_indicator(name: avg.rawValue, inputs: inputs, options: [Double(period)])
-    return (beginIdx, outputs)
+/// Double exponential moving average
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func dema(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "dema", inputs: inputs, options: [Double(n)])
 }
 
-public func sma(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.sma, period: n, inputs: inputs)
+/// Triple exponential moving average
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func tema(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "tema", inputs: inputs, options: [Double(n)])
 }
 
-public func wma(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.wma, period: n, inputs: inputs)
+///  Triangular Moving Average
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func trima(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "trima", inputs: inputs, options: [Double(n)])
 }
 
-public func ema(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.ema, period: n, inputs: inputs)
-}
-
-public func dema(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.dema, period: n, inputs: inputs)
-}
-
-public func tema(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.tema, period: n, inputs: inputs)
-}
-
-public func trima(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.trima, period: n, inputs: inputs)
-}
-
-public func kama(inputs: [Double], period n: Int) -> (Int, [Double]) {
-    return movingAverage(.kama, period: n, inputs: inputs)
+/// Kaufman Adaptive Moving Average
+/// /// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func kama(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "kama", inputs: inputs, options: [Double(n)])
 }
 
 /// The result of a bolling band computations
@@ -104,7 +69,7 @@ public struct BBandResult {
 ///   - stddev: The standard deviation
 ///   - inputs: The inputs
 /// - Returns: The result as a tuple of (`Int` ,`BBBandResult`)
-public func bbands(period: Int, stddev: Double, inputs: [Double]) -> (Int, BBandResult) {
+public func bbands(_ inputs: [Double], period: Int, stddev: Double) -> (Int, BBandResult) {
     let options: [Double] = [Double(period), Double(stddev)]
     let (beginIdx, outputs) = Bindings.shared.call_indicator(name: "bbands", inputs: inputs, options: options)
     let count = inputs.count - beginIdx
@@ -115,27 +80,19 @@ public func bbands(period: Int, stddev: Double, inputs: [Double]) -> (Int, BBand
 
 /// Vector Absolute Value
 /// - Parameter inputs: The inputs values
-public func abs(inputs: [Double]) -> (Int, [Double]) {
+public func abs(_ inputs: [Double]) -> (Int, [Double]) {
     return Bindings.shared.call_indicator(name: "abs", inputs: inputs, options: [])
 }
 
 /// - Parameter inputs: The inputs values
-public func acos(inputs: [Double]) -> (Int, [Double]) {
+public func acos(_ inputs: [Double]) -> (Int, [Double]) {
     return Bindings.shared.call_indicator(name: "acos", inputs: inputs, options: [])
 }
 
 /// Accumulation/Distribution Line
-/// - Parameter inputs: An array of `Quote` elements
-public func ad<T: Quote>(inputs: [T]) -> (Int, [Double]) {
-
-    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*4)
-    for i in 0..<inputs.count {
-        raw_inputs[i] = inputs[i].high
-        raw_inputs[i+inputs.count] = inputs[i].low
-        raw_inputs[i+2*inputs.count] = inputs[i].close
-        raw_inputs[i+3*inputs.count] = inputs[i].volume
-    }
-    return Bindings.shared.call_indicator(name: "ad", inputs: raw_inputs, options: [])
+/// - Parameter inputs: An array of `Quotable` elements
+public func ad<T: Quotable>(_ inputs: [T]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "ad", inputs: HLCV(inputs), options: [])
 }
 
 /// Vector addition
@@ -146,60 +103,36 @@ public func add(a: [Double], b: [Double]) -> (Int, [Double]) {
 }
 
 /// Accumulation/Distribution Oscillator
-/// - Parameter inputs: An array of `Quote` elements
+/// - Parameter inputs: An array of `Quotable` elements
 /// - Parameter short_period: The short period value
 /// - Parameter long_period: The long period value
-public func adosc<T: Quote>(inputs: [T], short_period: Double, long_period: Double) -> (Int, [Double]) {
-    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*4)
-    for i in 0..<inputs.count {
-        raw_inputs[i] = inputs[i].high
-        raw_inputs[i+inputs.count] = inputs[i].low
-        raw_inputs[i+2*inputs.count] = inputs[i].close
-        raw_inputs[i+3*inputs.count] = inputs[i].volume
-    }
-    return Bindings.shared.call_indicator(name: "adosc", inputs: raw_inputs, options: [short_period, long_period])
+public func adosc<T: Quotable>(_ inputs: [T], short_period: Double, long_period: Double) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "adosc", inputs: HLCV(inputs), options: [short_period, long_period])
 }
 
 /// Average Directional Movement Index
-/// - Parameter inputs: An array of `Quote` elements
+/// - Parameter inputs: An array of `Quotable` elements
 /// - Parameter period: The period
-public func adx<T: Quote>(inputs: [T], period n: Int) -> (Int, [Double]) {
-    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*3)
-    for i in 0..<inputs.count {
-        raw_inputs[i] = inputs[i].high
-        raw_inputs[i+inputs.count] = inputs[i].low
-        raw_inputs[i+2*inputs.count] = inputs[i].close
-    }
-    return Bindings.shared.call_indicator(name: "adx", inputs: raw_inputs, options: [Double(n)])
+public func adx<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "adx", inputs: HLC(inputs), options: [Double(n)])
 }
 
 /// Average Directional Movement Rating
-/// - Parameter inputs: An array of `Quote` elements
+/// - Parameter inputs: An array of `Quotable` elements
 /// - Parameter period: The period
-public func adxr<T: Quote>(inputs: [T], period n: Int) -> (Int, [Double]) {
-    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*3)
-    for i in 0..<inputs.count {
-        raw_inputs[i] = inputs[i].high
-        raw_inputs[i+inputs.count] = inputs[i].low
-        raw_inputs[i+2*inputs.count] = inputs[i].close
-    }
-    return Bindings.shared.call_indicator(name: "adx", inputs: raw_inputs, options: [Double(n)])
+public func adxr<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "adx", inputs: HLC(inputs), options: [Double(n)])
 }
 
 /// Aweosome Oscillator
-/// - Parameter inputs: An arrayof `Quote` elements.
-public func ao<T: Quote>(inputs: [T]) -> (Int, [Double]) {
-    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*2)
-    for i in 0..<inputs.count {
-        raw_inputs[i] = inputs[i].high
-        raw_inputs[i+inputs.count] = inputs[i].low
-    }
-    return Bindings.shared.call_indicator(name: "ao", inputs: raw_inputs, options: [])
+/// - Parameter inputs: An arrayof `Quotable` elements.
+public func ao<T: Quotable>(_ inputs: [T]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "ao", inputs: HL(inputs), options: [])
 }
 
 /// Absolute Price Oscillator
 /// - Parameter inputs: The input values
-public func apo(inputs: [Double]) -> (Int, [Double]) {
+public func apo(_ inputs: [Double]) -> (Int, [Double]) {
     return Bindings.shared.call_indicator(name: "apo", inputs: inputs, options: [])
 }
 
@@ -208,15 +141,148 @@ public struct ArroonResult {
     let up: [Double]
 }
 
-public func arroon<T: Quote>(inputs: [T], period n: Int) -> (Int, ArroonResult) {
-    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*2)
+/// Aroon
+/// - Parameter inputs: An array of `Quotable` elements
+/// - Parameter n: The period
+public func arroon<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, ArroonResult) {
 
-    for i in 0..<inputs.count {
-        raw_inputs[i] = inputs[i].high
-        raw_inputs[i+inputs.count] = inputs[i].low
-    }
-    let (beginIdx, outputs) = Bindings.shared.call_indicator(name: "ao", inputs: raw_inputs, options: [Double(n)])
+    let (beginIdx, outputs) = Bindings.shared.call_indicator(name: "arroon", inputs: HL(inputs), options: [Double(n)])
     let count = inputs.count - beginIdx
     let splits = stride(from: 0, to: 2*count, by: count).map { Array(outputs[$0..<$0+count])}
     return (beginIdx, ArroonResult(down: splits[0], up: splits[1]))
 }
+
+/// Aroon Oscillator
+/// - Parameter inputs:  An array of `Quotable` elements
+/// - Parameter n: The period
+public func aroonosc<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "aroonosc", inputs: HL(inputs), options: [Double(n)])
+}
+
+/// Vector Arcsine
+/// - Parameter inputs: The inputs values
+public func asin(_ inputs: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "asin", inputs: inputs, options: [])
+}
+
+/// Vector Arctangent
+/// - Parameter inputs: The inputs values
+public func atan(_ inputs: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "atan", inputs: inputs, options: [])
+}
+
+/// Average True Range
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func atr<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "atr", inputs: HLC(inputs), options: [Double(n)])
+}
+
+/// Average Price
+/// - Parameter inputs: An array of `Quotable` elements
+public func avgprice<T: Quotable>(_ inputs: [T]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "avgprice", inputs: OHLC(inputs), options: [])
+}
+
+/// Balance of Power
+/// - Parameter inputs: An array of `Quotable` elements
+public func bop<T: Quotable>(_ inputs: [T]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "bop", inputs: OHLC(inputs), options: [])
+}
+
+/// Commodity Channel Index
+/// - Parameter inputs: An array of `Quotable` elements
+/// - Parameter n: The period
+public func cci<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "cci", inputs: HLC(inputs), options: [Double(n)])
+}
+
+/// Vector Ceiling
+/// - Parameter inputs: The inputs
+public func ceil(_ inputs: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "ceil", inputs: inputs, options: [])
+}
+
+/// Chande Momentum Oscillator
+/// - Parameter inputs: The inputs
+/// - Parameter n: The period
+public func cmo(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "cmo", inputs: inputs, options: [Double(n)])
+}
+
+/// Vector Cosine
+/// - Parameter inputs: The inputs
+public func cos(_ inputs: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "cos", inputs: inputs, options: [])
+}
+
+/// Vector Hyperbolic Cosine
+/// - Parameter inputs: The inputs
+public func cosh(_ inputs: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "cosh", inputs: inputs, options: [])
+}
+
+/// Crossany
+/// - Parameter a: A values
+/// - Parameter b: B values
+public func crossany(a: [Double], b: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "crossany", inputs: a + b, options: [])
+}
+
+/// Crossover
+/// - Parameter a: A values
+/// - Parameter b: B values
+public func crossover(a: [Double], b: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "crossover", inputs: a + b, options: [])
+}
+
+/// Chaikins Volatility
+/// - Parameter inputs: An array of `Quotable` elements
+/// - Parameter n: The period
+public func cvi<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "cvi", inputs: HL(inputs), options: [])
+}
+
+/// Linear Decay
+/// - Parameter inputs: The input values
+/// - Parameter n: The period
+public func decay(_ inputs: [Double], period n: Int) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "decay", inputs: inputs, options: [Double(n)])
+}
+
+/// A struc representing the result of directio function
+public struct Direction {
+
+    /// The plus values
+    let plus: [Double]
+
+    /// The minus values
+    let minus: [Double]
+}
+
+/// Directional indicator
+/// - Parameter inputs: An array of `Quotable` elements
+/// - Parameter n: The period n
+public func di<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, Direction) {
+    let (begin, outputs) = Bindings.shared.call_indicator(name: "di", inputs: HLC(inputs), options: [Double(n)])
+    let count = inputs.count - begin
+    let splits = stride(from: 0, to: 2*count, by: count).map { Array(outputs[$0..<$0+count])}
+    return (begin, Direction(plus: splits[0], minus: splits[1]))
+}
+
+/// Vector division
+/// - Parameter inputs: The inputs
+public func div(_ inputs: [Double]) -> (Int, [Double]) {
+    return Bindings.shared.call_indicator(name: "div", inputs: inputs, options: [])
+}
+
+/// Directional Movement
+/// - Parameter inputs: An array of `Quotable` elements
+/// - Parameter n: The period n
+public func dm<T: Quotable>(_ inputs: [T], period n: Int) -> (Int, Direction) {
+    let (begin, outputs) = Bindings.shared.call_indicator(name: "dm", inputs: HL(inputs), options: [Double(n)])
+    let count = inputs.count - begin
+    let splits = stride(from: 0, to: 2*count, by: count).map { Array(outputs[$0..<$0+count])}
+    return (begin, Direction(plus: splits[0], minus: splits[1]))
+}
+
