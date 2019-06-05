@@ -14,7 +14,8 @@
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">tulipindicators Docs</a> (100% documented)</p>
-        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fyageek%2Fdocsets%2Ftulipindicators%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
+        <p class="header-right"><a href="https://github.com/yageek/tulipindicators-swift"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fyageek%2Egithub%2Eio%2Ftulipindicators%2Dswift%2Fdocsets%2Ftulipindicators%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -397,7 +398,26 @@
             
             <h1 id='tulipindicators-swift' class='heading'>tulipindicators-swift</h1>
 
-<p>This package is a swift packager that wraps the <a href="https://tulipindicators.org">tulip C library</a></p>
+<p>This swift package offers a technical analysis function by wrapping the <a href="https://tulipindicators.org">tulip C library</a></p>
+<h2 id='installation' class='heading'>Installation</h2>
+<h3 id='swift-package-manager' class='heading'>Swift package manager</h3>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">PackageDescription</span>
+
+<span class="k">let</span> <span class="nv">package</span> <span class="o">=</span> <span class="kt">Package</span><span class="p">(</span>
+    <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
+        <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/yageek/tulipindicators-swift.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="n">tulipindicators</span>
+
+<span class="k">let</span> <span class="nv">inputs</span><span class="p">:</span> <span class="p">[</span><span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">81.59</span><span class="p">,</span> <span class="mf">81.06</span><span class="p">,</span> <span class="mf">82.87</span><span class="p">,</span> <span class="mf">83.00</span><span class="p">,</span> <span class="mf">83.61</span><span class="p">,</span> <span class="mf">83.15</span><span class="p">,</span> <span class="mf">82.84</span><span class="p">,</span> <span class="mf">83.99</span><span class="p">,</span> <span class="mf">84.55</span><span class="p">,</span> <span class="mf">84.36</span><span class="p">,</span> <span class="mf">85.53</span><span class="p">,</span> <span class="mf">86.54</span><span class="p">,</span> <span class="mf">86.89</span><span class="p">,</span> <span class="mf">87.77</span><span class="p">,</span> <span class="mf">87.29</span><span class="p">]</span>
+<span class="k">let</span> <span class="p">(</span><span class="nv">beginIdx</span><span class="p">,</span> <span class="nv">outputs</span><span class="p">)</span> <span class="o">=</span> <span class="nf">msw</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="nv">period</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s">"Relative Input offset: </span><span class="se">\(</span><span class="n">beginIdx</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"MSW values: </span><span class="se">\(</span><span class="n">outputs</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+</code></pre>
 
           </section>
         </section>
