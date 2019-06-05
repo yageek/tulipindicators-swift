@@ -47,12 +47,42 @@ func HL<T: Quotable>(_ inputs: [T]) -> [Double] {
     return raw_inputs
 }
 
+func CV<T: Quotable>(_ inputs: [T]) -> [Double] {
+    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*2)
+
+    for i in 0..<inputs.count {
+        raw_inputs[i] = inputs[i].close
+        raw_inputs[i+inputs.count] = inputs[i].volume
+    }
+    return raw_inputs
+}
+
+func OC<T: Quotable>(_ inputs: [T]) -> [Double] {
+    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*2)
+
+    for i in 0..<inputs.count {
+        raw_inputs[i] = inputs[i].open
+        raw_inputs[i+inputs.count] = inputs[i].close
+    }
+    return raw_inputs
+}
+
 func HLC<T: Quotable>(_ inputs: [T]) -> [Double] {
     var raw_inputs = [Double](repeating: 0.0, count: inputs.count*3)
     for i in 0..<inputs.count {
         raw_inputs[i] = inputs[i].high
         raw_inputs[i+inputs.count] = inputs[i].low
         raw_inputs[i+2*inputs.count] = inputs[i].close
+    }
+    return raw_inputs
+}
+
+func HLV<T: Quotable>(_ inputs: [T]) -> [Double] {
+    var raw_inputs = [Double](repeating: 0.0, count: inputs.count*3)
+    for i in 0..<inputs.count {
+        raw_inputs[i] = inputs[i].high
+        raw_inputs[i+inputs.count] = inputs[i].low
+        raw_inputs[i+2*inputs.count] = inputs[i].volume
     }
     return raw_inputs
 }
