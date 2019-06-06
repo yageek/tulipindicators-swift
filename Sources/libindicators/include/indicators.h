@@ -55,8 +55,8 @@ extern "C" {
 #endif
 
 
-const char* ti_version();
-long int ti_build();
+const char* ti_version(void);
+long int ti_build(void);
 
 
 

@@ -20,11 +20,14 @@
  * along with Tulip Indicators.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
-import XCTest
+#import <UIKit/UIKit.h>
 
-import tulipindicatorsTests
+//! Project version number for tulipindicators.
+FOUNDATION_EXPORT double tulipindicatorsVersionNumber;
 
-var tests = [XCTestCaseEntry]()
-tests += tulipindicatorsTests.allTests()
-XCTMain(tests)
+//! Project version string for tulipindicators.
+FOUNDATION_EXPORT const unsigned char tulipindicatorsVersionString[];
+
+// In this header, you should import all the public headers of your framework using statements like #import <tulipindicators/PublicHeader.h>
+
+
