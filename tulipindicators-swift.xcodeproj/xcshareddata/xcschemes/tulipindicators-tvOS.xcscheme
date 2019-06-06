@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0CDB343722A904CF00D35B0E"
-               BuildableName = "tulipindicators-tests.xctest"
+               BuildableName = "tulipIndicatorTests.xctest"
                BlueprintName = "Test-tvOS"
                ReferencedContainer = "container:tulipindicators-swift.xcodeproj">
             </BuildableReference>

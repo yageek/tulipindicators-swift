@@ -1,6 +1,9 @@
 # tulipindicators-swift
 
-This swift package offers a technical analysis function by wrapping the [tulip C library](https://tulipindicators.org)
+[![License](https://img.shields.io/github/license/yageek/tulipindicators-swift.svg)](LICENSE)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
+This swift package offers a technical analysis function by wrapping the [tulipindicators C library](https://tulipindicators.org)
 
 ## Installation
 
@@ -14,6 +17,12 @@ let package = Package(
         .package(url: "https://github.com/yageek/tulipindicators-swift.git", from: "1.0.0"),
     ]
 )
+```
+
+### Carthage
+
+```
+github "yageek/tulip-indicators.swift" ~> 1.0.0
 ```
 
 ## Usage
