@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/yageek/tulipindicators-swift.svg)](LICENSE)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Cocoapods]](https://img.shields.io/cocoapods/v/tulipindicators-swift.svg)
 
 This swift package offers a technical analysis function by wrapping the [tulipindicators C library](https://tulipindicators.org)
 
@@ -25,6 +26,12 @@ let package = Package(
 
 ```
 github "yageek/tulipindicators-swift" ~> 1.0.0
+```
+
+### Cocoapods
+
+```
+pod 'tulipindicators-swift' ~> 1.0.0
 ```
 
 ## Usage
