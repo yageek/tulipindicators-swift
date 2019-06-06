@@ -58,8 +58,8 @@ extern "C"
 {
 #endif
 
-    const char *ti_version();
-    long int ti_build();
+    const char *ti_version(void);
+    long int ti_build(void);
 
 #define TI_REAL double
 
@@ -6442,8 +6442,8 @@ void ti_buffer_free(ti_buffer *buffer)
     free(buffer);
 }
 
-const char *ti_version() { return TI_VERSION; }
-long int ti_build() { return TI_BUILD; }
+const char *ti_version(void) { return TI_VERSION; }
+long int ti_build(void) { return TI_BUILD; }
 
 struct ti_indicator_info ti_indicators[] = {
     {"abs", "Vector Absolute Value", ti_abs_start, ti_abs, TI_TYPE_SIMPLE, 1, 0, 1, {"real", 0}, {"", 0}, {"abs", 0}},

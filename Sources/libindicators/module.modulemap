@@ -1,0 +1,5 @@
+module libindicators {
+    header "include/indicators.h"
+    header "include/indicators-wrapping.h"
+    export *
+}
