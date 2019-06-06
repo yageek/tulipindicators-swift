@@ -20,7 +20,7 @@
  * along with Tulip Indicators.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for tulipindicators.
 FOUNDATION_EXPORT double tulipindicatorsVersionNumber;
