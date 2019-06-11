@@ -3,7 +3,6 @@
 [![License](https://img.shields.io/github/license/yageek/tulipindicators-swift.svg)](LICENSE)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Cocoapods](https://img.shields.io/cocoapods/v/tulipindicators-swift.svg)](https://img.shields.io/cocoapods/v/tulipindicators-swift.svg)
-[![Platform](https://img.shields.io/cocoapods/p/tulipindicators-swift?style=flat)](http://cocoadocs.org/docsets/tulipindicators-swift)
 
 This swift package offers a technical analysis function by wrapping the [tulipindicators C library](https://tulipindicators.org)
 

@@ -5,5 +5,5 @@ root_url: https://yageek.github.io/tulipindicators-swift/
 module_version: 1.0.0
 module: tulipindicators
 framework_root: .
-xcodebuild_arguments: ["-scheme", "tulipindicators-Package"]
+xcodebuild_arguments: ["-scheme", "tulipindicators-macOS"]
 theme: apple
