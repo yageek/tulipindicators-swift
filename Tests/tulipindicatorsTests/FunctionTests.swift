@@ -129,6 +129,21 @@ final class FunctionTests: XCTestCase {
         TIAssert(res.sine, exp_sine, delta)
         TIAssert(res.lead, exp_lead, delta)
     }
+
+    func testStochCrash() {
+        let inputs: [Quote] = [
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+            Quote(high: 0, low: 0, open: 0, close: 0, volume: 0),
+        ]
+        let _ = stoch(inputs, kPeriod: 2, kSlowingPeriod: 2, dPeriod: 2)
+    }
     
     // MARK: - Info
     func testInfo() {
