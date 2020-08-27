@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "tulipindicators-swift"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "A technical analysis library around tulip"
   spec.description  = <<-DESC
   This swift package offers a technical analysis
