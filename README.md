@@ -17,7 +17,7 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .package(url: "https://github.com/yageek/tulipindicators-swift.git", from: "1.0.0"),
+        .package(url: "https://github.com/yageek/tulipindicators-swift.git", from: "1.0.1"),
     ]
 )
 ```
@@ -25,13 +25,13 @@ let package = Package(
 ### Carthage
 
 ```
-github "yageek/tulipindicators-swift" ~> 1.0.0
+github "yageek/tulipindicators-swift" ~> 1.0.1
 ```
 
 ### Cocoapods
 
 ```
-pod 'tulipindicators-swift' ~> 1.0.0
+pod 'tulipindicators-swift' ~> 1.0.1
 ```
 
 ## Usage
