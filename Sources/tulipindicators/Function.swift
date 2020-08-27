@@ -633,7 +633,7 @@ public struct StochResult {
 /// - Parameter inputs: An array of `Quotable` elements.
 /// - Parameter period: The period
 public func stoch<T: Quotable>(_ inputs: [T], kPeriod: Int, kSlowingPeriod: Int, dPeriod: Int) -> (Int, StochResult) {
-    let (beginIdx, outputs) = Tulip.shared.call_indicator(name: "stock", inputs: HLC(inputs), options: [Double(kPeriod), Double(kSlowingPeriod), Double(dPeriod)])
+    let (beginIdx, outputs) = Tulip.shared.call_indicator(name: "stoch", inputs: HLC(inputs), options: [Double(kPeriod), Double(kSlowingPeriod), Double(dPeriod)])
     let count = inputs.count - beginIdx
     let splits = stride(from: 0, to: 2*count, by: count).map { Array(outputs[$0..<$0+count])}
     return (beginIdx, StochResult(K: splits[0], D: splits[1]))
